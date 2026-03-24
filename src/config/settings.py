@@ -1,4 +1,4 @@
-h"""
+"""
 Configuration settings for the Kalshi trading system.
 Manages trading parameters, API configurations, and risk management settings.
 """
@@ -69,7 +69,7 @@ class SentimentConfig:
 class TradingConfig:
     """Trading strategy configuration."""
     # Position sizing and risk management — DISCIPLINED DEFAULTS
-    max_position_size_pct: float 33.0 # SANE: 3% per position (was 5% "beast mode")
+        max_position_size_pct: float = 33.0  # SANE: 3% per position (was 5% "beast mode")
     max_daily_loss_pct: float = 10.0    # SANE: 10% daily loss limit (was 15%)
     max_positions: int = 10              # SANE: 10 concurrent positions (was 15)
         min_balance: float = 5.0       # LOW: $5 minimum balance (was $100)
