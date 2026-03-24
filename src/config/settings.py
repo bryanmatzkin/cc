@@ -68,15 +68,12 @@ class SentimentConfig:
 @dataclass
 class TradingConfig:
     """Trading strategy configuration."""
-    # Position sizing and risk management — DISCIPLINED DEFAULTS
-    max_position_size_pct: float = 33.0  # SANE: 10% per position (was 5% "beast mode")
-    max_daily_loss_pct: float = 10.0    # SANE: 10% daily loss limit (was 15%)
-    max_positions: int = 10              # SANE: 10 concurrent positions (was 15)
-        min_balance: float = 5.0       # LOW: $5 minimum balance (was $100)
-    
-    # Market filtering criteria — DISCIPLINED
-        min_volume: float = 100.0     # LOWER: More market access (was 500)
-        max_time_to_expiry_days: int = 5   # SHORT-TERM: 5 days max (was 14)
+        max_position_size_pct: float = 30.0  # 30% per position
+        max_daily_loss_pct: float = 30.0     # 30% daily loss limit
+        max_positions: int = 10              # 10 concurrent positions
+        min_balance: float = 0.0             # no minimum balance
+        min_volume: float = 100.0            # LOWER: More market access (was 500)
+        max_time_to_expiry_days: int = 5     # SHORT-TERM: 5 days max (was 14)
     
     # AI decision making — DATA-DRIVEN THRESHOLDS  
     min_confidence_to_trade: float = 0.60   # OPTIMIZED: 60% confidence minimum (reduced from 65% due to zero-trade issue)
