@@ -48,13 +48,12 @@ CAPABILITY_MAP: Dict[str, List[Tuple[str, str]]] = {
 }
 
 # Full fleet: used when we need a fallback chain that spans all providers.
-FULL_FLEET: List[Tuple[str, str]] = [
-    ("grok-4-1-fast-reasoning", "xai"),
-    ("anthropic/claude-sonnet-4.5", "openrouter"),
-    ("openai/o3", "openrouter"),
-    ("google/gemini-3-pro-preview", "openrouter"),
-    ("deepseek/deepseek-v3.2", "openrouter"),
-]
+CAPABILITY_MAP: Dict[str, List[Tuple[str, str]]] = {
+    "fast": [("gemini-1.5-flash", "gemini")],
+    "cheap": [("gemini-1.5-flash", "gemini")],
+    "reasoning": [("gemini-1.5-flash", "gemini")],
+    "balanced": [("gemini-1.5-flash", "gemini")],
+}
 
 
 # ---------------------------------------------------------------------------
