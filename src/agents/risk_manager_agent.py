@@ -33,12 +33,12 @@ class RiskManagerAgent(BaseAgent):
         "   risky). Consider: liquidity, time to expiry, volatility, information "
         "   quality, and model disagreement.\n"
         "4. POSITION SIZE -- Recommend what percentage of available capital to "
-        "   allocate (0-100%). Use aggressive fractional Kelly criterion logic:\n"
+        "   allocate (0-100%). Use fractional Kelly criterion logic:\n"
         "   - High confidence (>0.75): recommend 20-25% of capital\n"
         "   - Medium confidence (0.50-0.75): recommend 10-15% of capital\n"
-        "   - Low confidence (<0.50): recommend 0% (skip the trade)\n"
-        "   Higher EV and lower risk = larger position. Be aggressive when "
-        "   conviction is high — small positions do not move the needle.\n"
+        "   - Low confidence (<0.50): recommend 5-10% of capital (size small, do NOT skip)\n"
+        "   Higher EV and lower risk = larger position. Always recommend a non-zero "
+        "   size when EV is positive — let the trader agent decide whether to trade.\n"
         "5. WORST CASE -- Maximum loss equals the full amount paid (Kalshi "
         "   cashout mechanics mean you cannot recover principal on exit).\n"
         "6. EDGE DURABILITY -- How long will the informational edge last?\n\n"
@@ -126,19 +126,22 @@ class RiskManagerAgent(BaseAgent):
         should_trade = bool(raw_json.get("should_trade", False))
         reasoning = str(raw_json.get("reasoning", "No reasoning provided."))
 
-        # Aggressive position sizing based on confidence tiers.
+        # Position sizing based on confidence tiers.
         # The AI's raw recommendation is used as a starting point, then
-        # overridden by the confidence-tier floors/caps below.
+        # clamped into the appropriate tier range below.
         raw_size_pct = self.clamp(
             raw_json.get("recommended_size_pct", 1.0), lo=0.0, hi=100.0
         )
 
-        # Derive confidence from context if available (passed via raw_json extras)
-        # Fall back to a neutral 0.6 if not present.
-        confidence = self.clamp(float(raw_json.get("_confidence_hint", 0.6)))
+        # Scale position size by confidence tier.
+        # Use the AI's raw recommendation as a starting point, then clamp it
+        # into the appropriate tier range.  Low confidence trades are sized
+        # small (5-10%) rather than skipped — the trader agent owns the final
+        # BUY/SKIP decision based on edge, not confidence alone.
+        confidence = self.clamp(float(raw_json.get("confidence", 0.6)))
 
         if confidence > 0.75:
-            # High conviction: allow up to 25% position size
+            # High conviction: 20-25% position size
             recommended_size_pct = max(raw_size_pct, 20.0)
             recommended_size_pct = min(recommended_size_pct, 25.0)
         elif confidence >= 0.50:
@@ -146,9 +149,9 @@ class RiskManagerAgent(BaseAgent):
             recommended_size_pct = max(raw_size_pct, 10.0)
             recommended_size_pct = min(recommended_size_pct, 15.0)
         else:
-            # Low conviction: skip the trade
-            recommended_size_pct = 0.0
-            should_trade = False
+            # Low conviction: 5-10% position size — size small, don't skip
+            recommended_size_pct = max(raw_size_pct, 5.0)
+            recommended_size_pct = min(recommended_size_pct, 10.0)
 
         return {
             "risk_score": risk_score,

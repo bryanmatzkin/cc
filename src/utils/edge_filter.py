@@ -34,14 +34,14 @@ class EdgeFilter:
     UPDATED: More aggressive thresholds to allow more trading opportunities.
     """
     
-    # DECREASED: More permissive edge requirements for more trades
-    MIN_EDGE_REQUIREMENT = 0.08        # DECREASED: 8% minimum edge (was 15%)
-    HIGH_CONFIDENCE_EDGE = 0.06        # DECREASED: 6% edge for high confidence (was 12%)  
-    MEDIUM_CONFIDENCE_EDGE = 0.08      # DECREASED: 8% edge for medium confidence (was 15%)
-    LOW_CONFIDENCE_EDGE = 0.12         # DECREASED: 12% edge for low confidence (was 20%)
-    
-    # DECREASED: More permissive filters for more opportunities
-    MIN_CONFIDENCE_FOR_TRADE = 0.50    # DECREASED: 50% minimum confidence (was 65%)
+    # Edge thresholds aligned with the 5% minimum edge policy
+    MIN_EDGE_REQUIREMENT = 0.05        # 5% minimum edge
+    HIGH_CONFIDENCE_EDGE = 0.05        # 5% edge for high confidence
+    MEDIUM_CONFIDENCE_EDGE = 0.05      # 5% edge for medium confidence
+    LOW_CONFIDENCE_EDGE = 0.05         # 5% edge for low confidence (size small, don't skip)
+
+    # No minimum confidence gate — let the trader agent decide based on edge
+    MIN_CONFIDENCE_FOR_TRADE = 0.0     # Disabled: confidence gate removed
     MAX_ACCEPTABLE_RISK = 0.6          # INCREASED: 60% max position risk (was 50%)
     
     # UPDATED: More permissive quality filters
@@ -82,13 +82,13 @@ class EdgeFilter:
         else:
             side = "NO"   # AI thinks NO is underpriced (YES is overpriced)
         
-        # Confidence-adjusted edge thresholds
+        # Uniform 5% edge threshold regardless of confidence level
         if confidence >= 0.8:
-            required_edge = cls.HIGH_CONFIDENCE_EDGE     # 8% for high confidence
+            required_edge = cls.HIGH_CONFIDENCE_EDGE     # 5% for high confidence
         elif confidence >= 0.6:
-            required_edge = cls.MEDIUM_CONFIDENCE_EDGE   # 10% for medium confidence
+            required_edge = cls.MEDIUM_CONFIDENCE_EDGE   # 5% for medium confidence
         else:
-            required_edge = cls.LOW_CONFIDENCE_EDGE      # 15% for low confidence
+            required_edge = cls.LOW_CONFIDENCE_EDGE      # 5% for low confidence
         
         # Calculate confidence-adjusted edge
         confidence_adjusted_edge = edge_percentage * confidence

@@ -29,11 +29,11 @@ class TraderAgent(BaseAgent):
         "   should lower your confidence.\n"
         "2. EDGE CALCULATION -- Calculate the statistical edge:\n"
         "   edge = ai_probability - market_probability\n"
-        "   Example: market at 50¢ (50% implied), AI says 65% → edge = 15%.\n"
-        "   ONLY trade if |edge| > 10%. If edge ≤ 10%, output action=SKIP.\n"
-        "   This is a hard rule — no exceptions.\n"
-        "3. EV THRESHOLD -- Only trade if expected value is strongly positive "
-        "   (at least 10% edge over market price).\n"
+        "   Example: market at 50\u00a2 (50% implied), AI says 55% \u2192 edge = 5%.\n"
+        "   ONLY trade if |edge| > 5%. If edge \u2264 5%, output action=SKIP.\n"
+        "   This is a hard rule \u2014 no exceptions.\n"
+        "3. EV THRESHOLD -- Only trade if expected value is positive "
+        "   (at least 5% edge over market price).\n"
         "4. RISK CHECK -- Does the risk manager approve? Respect position sizing "
         "   recommendations.\n"
         "5. PRICE SETTING -- Set a limit price that gives you edge. Never chase "
@@ -53,6 +53,7 @@ class TraderAgent(BaseAgent):
         '  "reasoning": string (detailed justification referencing the agents '
         'and explicitly stating the edge calculation)'
     )
+
 
     def _build_prompt(self, market_data: dict, context: dict) -> str:
         summary = self.format_market_summary(market_data)
@@ -142,7 +143,8 @@ class TraderAgent(BaseAgent):
     # Minimum statistical edge required to place a trade.
     # If |ai_probability - market_probability| <= this threshold, the trade
     # is forced to SKIP regardless of what the model recommends.
-    MIN_EDGE_TO_TRADE: float = 0.10
+    MIN_EDGE_TO_TRADE: float = 0.05
+
 
     def _parse_result(self, raw_json: dict) -> dict:
         action = str(raw_json.get("action", "SKIP")).upper()
