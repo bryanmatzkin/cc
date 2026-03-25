@@ -15,6 +15,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from src.clients.xai_client import TradingDecision, XAIClient
 from src.clients.openrouter_client import OpenRouterClient, MODEL_PRICING
+from src.clients.gemini_client import GeminiClient
 from src.config.settings import settings
 from src.utils.logging_setup import TradingLoggerMixin
 
