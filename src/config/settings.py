@@ -136,7 +136,7 @@ class TradingConfig:
     max_analyses_per_market_per_day: int = 10
 
     # Daily AI spending limits — set high since Gemini free tier
-    daily_ai_cost_limit: float = field(default_factory=lambda: float(os.getenv("DAILY_AI_COST_LIMIT", "100.0")))
+    daily_ai_cost_limit: float = field(default_factory=lambda: float(os.getenv("DAILY_AI_COST_LIMIT", "200.0")))
     enable_daily_cost_limiting: bool = False
     sleep_when_limit_reached: bool = False
 
