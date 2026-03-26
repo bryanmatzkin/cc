@@ -8,7 +8,7 @@ from typing import Dict, List, Optional
 from dataclasses import dataclass, field
 from dotenv import load_dotenv
 
-# Load environment variables
+# Load environment variablesh
 load_dotenv()
 
 
@@ -51,15 +51,17 @@ class SentimentConfig:
         "https://feeds.reuters.com/reuters/topNews",
         "https://feeds.reuters.com/reuters/businessNews",
         "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml",
-        "https://feeds.bbci.co.uk/news/business/rss.xml",
+                "https://feeds.bbci.co.uk/news/business/rss.xml",
+        "https://www.coindesk.com/arc/outboundfeeds/rss/",
+        "https://cointelegraph.com/rss",
+        "https://bitcoinmagazine.com/.rss/full/",
+        "https://decrypt.co/feed",
     ])
     sentiment_model: str = "gemini-1.5-flash"
     cache_ttl_minutes: int = 30
     max_articles_per_source: int = 10
     relevance_threshold: float = 0.3
-
-
-# Trading strategy configuration
+            
 # NCAAB NO-side: 74% WR, +10% ROI — ONLY profitable category.
 # Economic trades: -70% ROI, 78% of all losses.
 # PRICE IMPACT NOTE: Buying a position typically causes the price to drop immediately
@@ -84,11 +86,11 @@ class TradingConfig:
         "sports": 0.90,
         "economics": 1.15,
         "politics": 1.05,
+                                "crypto": 1.20,
         "default": 1.0
     })
 
     scan_interval_seconds: int = 60
-
     # AI model configuration — using Gemini directly (free tier, no xAI needed)
     primary_model: str = "grok-3"
     fallback_model: str = "grok-3"
@@ -116,7 +118,7 @@ class TradingConfig:
     num_processor_workers: int = 5
 
     # Market selection preferences
-    preferred_categories: List[str] = field(default_factory=lambda: [])
+    preferred_categories: List[str] = field(default_factory=lambda: ["crypto", "economics"])
     excluded_categories: List[str] = field(default_factory=lambda: [])
 
     # High-confidence, near-expiry strategy
