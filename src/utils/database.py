@@ -415,8 +415,7 @@ class DatabaseManager(TradingLoggerMixin):
                     volume >= ? AND
                     expiration_ts > ? AND
                     expiration_ts <= ? AND
-                    status = 'active' AND
-                    has_position = 0
+                    status = 'active'
             """, (volume_min, now_ts, max_expiry_ts))
             rows = await cursor.fetchall()
             

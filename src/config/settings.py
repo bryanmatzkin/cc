@@ -32,8 +32,8 @@ class EnsembleConfig:
     enabled: bool = True
     models: Dict[str, Dict] = field(default_factory=lambda: {
         "gemini-1.5-flash": {"provider": "gemini", "role": "forecaster", "weight": 0.40},
-        "gemini-1.5-flash": {"provider": "gemini", "role": "news_analyst", "weight": 0.30},
-        "gemini-1.5-flash": {"provider": "gemini", "role": "risk_manager", "weight": 0.30},
+        "gemini-news-analyst": {"provider": "gemini", "role": "news_analyst", "weight": 0.30},
+        "gemini-risk-manager": {"provider": "gemini", "role": "risk_manager", "weight": 0.30},
     })
     min_models_for_consensus: int = 1
     disagreement_threshold: float = 0.25

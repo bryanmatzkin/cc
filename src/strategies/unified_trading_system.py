@@ -252,7 +252,7 @@ class UnifiedAdvancedTradingSystem:
             
             # Step 1: Get ALL available markets (no time restrictions) - MORE PERMISSIVE VOLUME
             markets = await self.db_manager.get_eligible_markets(
-            volume_min=200,  # DECREASED: Much lower volume requirement (was 50,000, now 200) for more opportunities
+            volume_min=50,  # DECREASED: Much lower volume requirement (was 50,000, now 50) for more opportunities
             max_days_to_expiry=365  # Accept any timeline with dynamic exits
         )
             if not markets:
