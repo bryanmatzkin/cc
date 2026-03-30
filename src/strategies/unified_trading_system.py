@@ -538,10 +538,13 @@ class UnifiedAdvancedTradingSystem:
                     
                     # Get price for the intended side (already determined above)
                     if intended_side == "YES":
-                        price = market_info.get('yes_price', 50) / 100
+                        price = min(0.99, max(0.01, market_info.get('yes_price', 50) / 100))
                     else:
-                        price = market_info.get('no_price', 50) / 100
-                    
+                        price = min(0.99, max(0.01, market_info.get('no_price', 50) / 100))
+
+                    if price <= 0.01 or price >= 1.0:
+                        self.logger.warning(f"Skipping {market_id} - invalid price {price}")
+                        continue
                     # Calculate quantity
                     quantity = max(1, int(position_value / price))
                     
