@@ -248,7 +248,7 @@ class UnifiedAdvancedTradingSystem:
                 self.logger.info(f"⚠️  Position limits enforcement needed: {limits_status['recommendations']}")
                 enforcement_result = await limits_manager.enforce_position_limits()
                 if enforcement_result['action'] == 'positions_closed':
-                    self.logger.info(f"✅ Executed position: {market_id} {intended_side} {quantity} at {price:.3f}")
+                    self.logger.info(f"✅ Position limits enforced successfully")
             
             # Step 1: Get ALL available markets (no time restrictions) - MORE PERMISSIVE VOLUME
             markets = await self.db_manager.get_eligible_markets(
@@ -312,7 +312,7 @@ class UnifiedAdvancedTradingSystem:
                 return {'orders_placed': 0, 'expected_profit': 0.0}
             
             # Filter to top opportunities within capital allocation
-            max_opportunities = int(self.market_making_capital / 100)  # $100 per opportunity
+            max_opportunities = max(3, int(self.market_making_capital / 10))
             top_opportunities = opportunities[:max_opportunities]
             
             # Execute market making
@@ -611,7 +611,8 @@ class UnifiedAdvancedTradingSystem:
                         results['successful_executions'] += 1
                         results['positions_created'] += 1
                         results['total_capital_used'] += position_value
-                        self.logger.info(f"✅ Executed position: {market_id} {side} {quantity} at {price:.3f}")
+                        self.logger.info(f"✅ Executed position: {market_id} {intended_side} {quantity} at {price:.3f}")
+
                     else:
                         results['failed_executions'] += 1
                         self.logger.error(f"❌ Failed to execute position for {market_id}")
