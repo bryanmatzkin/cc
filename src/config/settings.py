@@ -75,11 +75,11 @@ class TradingConfig:
     max_daily_loss_pct: float = 30.0
     max_positions: int = 10
     min_balance: float = 0.0
-    min_volume: float = 100.0
+    min_volume: float = 50.0
     max_time_to_expiry_days: int = 5
 
     # AI decision making
-    min_confidence_to_trade: float = 0.60
+    min_confidence_to_trade: float = 0.55
 
     # Category-specific confidence adjustments
     category_confidence_adjustments: Dict[str, float] = field(default_factory=lambda: {
@@ -98,13 +98,13 @@ class TradingConfig:
     ai_max_tokens: int = 4000
 
     # Position sizing (LEGACY)
-    default_position_size: float = 3.0
+    default_position_size: float = .50
     position_size_multiplier: float = 1.0
 
     # Kelly Criterion settings (PRIMARY position sizing method)
     use_kelly_criterion: bool = True
-    kelly_fraction: float = 0.25
-    max_single_position: float = 0.03
+    kelly_fraction: float = 0.40
+    max_single_position: float = 0.20
 
     # Live trading mode control
     live_trading_enabled: bool = field(default_factory=lambda: os.getenv("LIVE_TRADING_ENABLED", "false").lower() == "true")
@@ -129,7 +129,7 @@ class TradingConfig:
 
     # AI trading criteria
     max_analysis_cost_per_decision: float = 0.15
-    min_confidence_threshold: float = 0.45
+    min_confidence_threshold: float = 0.55
 
     # Cost control — Gemini free tier is generous, set high limits
     daily_ai_budget: float = 100.0
@@ -143,7 +143,7 @@ class TradingConfig:
     sleep_when_limit_reached: bool = False
 
     # Market filtering
-    min_volume_for_ai_analysis: float = 100.0
+    min_volume_for_ai_analysis: float = 50.0
     exclude_low_liquidity_categories: List[str] = field(default_factory=lambda: [])
 
     # Price impact awareness
@@ -171,7 +171,7 @@ arbitrage_allocation: float = 0.10
 # === PORTFOLIO OPTIMIZATION SETTINGS ===
 use_risk_parity: bool = True
 rebalance_hours: int = 6
-min_position_size: float = 5.0
+min_position_size: float = .50
 max_opportunities_per_batch: int = 50
 
 # === RISK MANAGEMENT LIMITS ===
@@ -184,7 +184,7 @@ max_sector_exposure: float = 0.30
 target_sharpe: float = 0.3
 target_return: float = 0.15
 min_trade_edge: float = 0.05
-min_confidence_for_large_size: float = 0.50
+min_confidence_for_large_size: float = 0.55
 
 # === DYNAMIC EXIT STRATEGIES ===
 # Price impact note: after buying, price typically drops ~0.75 cents immediately.
@@ -204,11 +204,11 @@ order_refresh_minutes: int = 15
 max_orders_per_market: int = 4
 
 # === MARKET SELECTION ===
-min_volume_for_analysis: float = 100.0
+min_volume_for_analysis: float = 50.0
 min_volume_for_market_making: float = 500.0
 min_price_movement: float = 0.02
 max_bid_ask_spread: float = 0.15
-min_confidence_long_term: float = 0.45
+min_confidence_long_term: float = 0.55
 
 # === COST OPTIMIZATION ===
 daily_ai_budget: float = 100.0
