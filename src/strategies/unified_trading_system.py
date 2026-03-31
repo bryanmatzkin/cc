@@ -184,7 +184,7 @@ class UnifiedAdvancedTradingSystem:
 
             self.logger.info(f"💰 PORTFOLIO VALUE: Cash=${available_cash:.2f} + Positions=${total_position_value:.2f} = Total=${self.total_capital:.2f}")
 
-            if self.total_capital < 10:  # Minimum $10 to trade
+            if self.total_capital < 5:  # Minimum $10 to trade
                 self.logger.warning(f"⚠️ Total capital too low: ${self.total_capital:.2f} - may limit trading")
 
         except Exception as e:
