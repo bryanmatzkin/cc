@@ -109,7 +109,7 @@ class AdvancedPortfolioOptimizer:
         # Portfolio parameters
         self.total_capital = getattr(settings.trading, 'total_capital', 10000)
         self.max_position_fraction = getattr(settings.trading, 'max_single_position', 0.25)
-        self.min_position_size = getattr(settings.trading, 'min_position_size', 5)
+        self.min_position_size = getattr(settings.trading, 'min_position_size', 0.50)
         self.kelly_fraction_multiplier = getattr(settings.trading, 'kelly_fraction', 0.25)  # Fractional Kelly
         
         # Risk management
@@ -632,12 +632,15 @@ class AdvancedPortfolioOptimizer:
                 opp = next((o for o in opportunities if o.market_id == market_id), None)
                 if not opp:
                     continue
-                
-                # Apply minimum position size
+               # Apply minimum position size
                 dollar_allocation = fraction * self.total_capital
-                if dollar_allocation < self.min_position_size:
+                if dollar_allocation < 0.50:  # Minimum $0.50
                     continue
+                # Apply maximum position fraction
+                final_fraction = min(fraction, self.max_position_fraction)
                 
+                # Check if this would exceed total capital
+                i
                 # Apply maximum position fraction
                 final_fraction = min(fraction, self.max_position_fraction)
                 
